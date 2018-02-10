@@ -1,0 +1,149 @@
+.App {
+  text-align: center;
+}
+
+.C-logo {
+  height: 10px;
+  color: white;
+  float:right;
+}
+
+.AstroJLogo{
+  height:60px;
+  color:none;
+  float:left;
+  padding-top: 0px;
+  padding-left: 65px;
+}
+
+.App-header {
+  /*animation: pulse 10s;*/
+  height: 35px;
+  padding: 20px;
+  background-color:  #0a2342;
+  float:center;
+}
+
+.title {
+  font-size: 32px;
+  font-style: none;
+  color:#0a2342;
+  height: 18px;
+  text-align:left;
+  padding-left: 50px;
+  padding-top: 20px;
+}
+.title2 {
+  font-size: 20px;
+  font-style: none;
+  color:lightgrey;
+  height: 18px;
+  text-align:left;
+  padding-left: 55px;
+  padding-top: 20px;
+}
+.line1{
+  color: lightgrey;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.Updates{
+  font-size: 30px;
+  font-style: none;
+  color:#0a2342;
+  height: 18px;
+  text-align:left;
+  padding-left: 140px;
+  padding-top: 20px;
+}
+
+.line2{
+  color: lightgrey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.Updates2{
+  color:#0a2342;
+  background: white;
+  font-size: 18px;
+  text-align: left;
+  padding-left:140px;
+}
+.date{
+  font-size: 12px;
+}
+.message{
+  font-size:15px;
+  font-style: italic;
+}
+.InternRemote{
+  font-size: 30px;
+  font-style: none;
+  color:#0a2342;
+  height: 18px;
+  text-align:left;
+  padding-left: 140px;
+  padding-top: 50px;
+}
+.App-intro {
+  font-size: 18px;
+  text-align: left;
+  font-style:none;
+  padding-top: 0px;
+  padding-bottom: 10px;
+  padding-left: 140px;
+}
+
+{/*-----------------------------------------------------------------------------------------------------*/}
+.AltiButton {
+  background-color: white;
+  text-align: center;
+  border-radius: 8px;
+  cursor:pointer;
+}
+.AltiButton:hover{
+  background: lightblue;
+  cursor:pointer;
+  background: lightblue;
+}
+.SpeeButton {
+  background-color: white;
+  text-align: center;
+  float: center;
+  border-radius: 8px;
+  cursor:pointer;
+}
+.SpeeButton:hover{
+  background: lightblue;
+  cursor:pointer;
+}
+.SpeeButton:cursor{
+  cursor:pointer;
+}
+.helpButton{
+    background-color: #0a2342;
+    border: none;
+    font-style: bold;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 10px;
+    float: right;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor:pointer;
+}
+.helpButton:hover{
+  color: turquoise;
+  cursor:pointer;
+}
+
+@keyframes pulse{
+  0% {
+    background-color: white;
+  }
+
+  100% {
+    background-color: #C3EBE7;
+  }
+}
