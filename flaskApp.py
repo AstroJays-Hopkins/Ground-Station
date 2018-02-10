@@ -14,9 +14,10 @@ CORS(api_app, support_credentials=True)
 def home():
     return "The telemetry reading is hidden here"
 
-@api_app.route("/getTelem/")
+@api_app.route("/getTelem")
 @cross_origin(supports_credentials=True)
 def getTelem():
-    ser = serial.Serial('dev/ttyUSB0') #Open Serial port
-    print(ser.name)
-    ser.read
+    with serial.Serial('/dev/ttyS1', 19200, timeout=1) as ser:
+        x = ser.read()
+        line = ser.readline()
+    print(x)
