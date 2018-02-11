@@ -21,12 +21,7 @@ const ProgressBar = require('react-progress-bar-plus');
 
 //LIST OF FUNCTIONS EXECUTED BY THE USER.
 function AllButton (AllButton) {
-    var x=document.getElementById('AllPress')
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
+  alert("This button will open all telemtry ports.")
 }
 
 function AltiButton (AltiButton) {
@@ -67,13 +62,7 @@ function AnguButton (AnguButton) {
 }
 
 function helpButton (helpButton) {
-    var x=document.getElementById('helpPress')
-
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
+  alert("Help option is still under maintenance.")
 }
 ///
 
