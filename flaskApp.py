@@ -17,7 +17,7 @@ def home():
 @api_app.route("/getTelem")
 @cross_origin(supports_credentials=True)
 def getTelem():
-    with serial.Serial('/dev/ttyS1', 19200, timeout=1) as ser:
+    with serial.Serial('/dev/ttyS1', 19200, timeout=0) as ser:
         x = ser.read()
         line = ser.readline()
     print(x)
