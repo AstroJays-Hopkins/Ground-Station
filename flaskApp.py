@@ -9,7 +9,7 @@ import base64
 api_app = Flask(__name__)
 CORS(api_app, support_credentials=True)
 
-@api_app.route("/")
+@api_app.route("/"
 @cross_origin(supports_credentials=True)
 def home():
     return "The telemetry reading is hidden here"
