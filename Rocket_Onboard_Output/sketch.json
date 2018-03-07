@@ -1,0 +1,1 @@
+{"secrets":[],"cpu":{"architecture":"avr","build":[{"flavour":"default","fqbn":"arduino:avr:uno"}],"default_flavour":"default","fqbn":"arduino:avr:uno","href":"/builder/v2/boards/arduino:avr:uno","name":"Arduino/Genuino Uno","com_name":null,"flavour":"default","unknown":false}}
