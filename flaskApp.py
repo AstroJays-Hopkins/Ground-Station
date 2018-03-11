@@ -17,9 +17,14 @@ def home():
         This code will continuously run while the GUI is working
         Change Timeout to read more data points.
     """
-    with serial.Serial('/dev/ttyS1.usbserial', 9600, timeout=2000) as ser:
+    port = '/dev/ttyS0'
+    line = serial.Serial(port,9600,timeout=0)'
+    line = "Altitude:0.00 Acceleration:-1.00 -1.00 -0.60 Angular orientation:4 4 4"
+    print(line)
+    with serial.Serial(port, 9600, timeout=0) as ser:
         # x = ser.read() #Written to read one byte
         line = ser.readline()
+        print(line)
         altitude = 1
         x_acc = 1
         y_acc = 1
