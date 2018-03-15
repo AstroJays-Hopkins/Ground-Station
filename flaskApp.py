@@ -77,8 +77,8 @@ def getAng():
 
         Data collected here is to be directly displayed as numbers on ReactApp.
     """
-    start = line.rindex('Angular orientation', 0, line.len())
-    return (line[start, line.len()])
+    start = line.rindex('Angular orientation')
+    return (line[start, line.len()+1])
 
 @api_app.route("/getLoc")
 @cross_origin(supports_credentials=True)
