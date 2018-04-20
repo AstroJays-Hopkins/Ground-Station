@@ -69,7 +69,10 @@ def getAcc():
         Data collected here will be displayed as rising and lowering bar graph.
     """
     accel = {'accel':(np.random.rand()/10+.5)*1000}
-    print(json.dumps(accel)) 
+    print(json.dumps(accel))
+    f = open("accel.txt","a+")
+    f.write(str(accel['accel'])+"\n")
+    f.close()
     return(json.dumps(accel))
 
 @api_app.route("/getAng")

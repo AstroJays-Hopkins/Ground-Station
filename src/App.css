@@ -112,6 +112,18 @@
   cursor:pointer;
   background: lightgreen;
 }
+.lineChart {
+  background-color: white;
+  text-align: center;
+  float: center;
+  padding-top: 20px;
+  padding-left: 10px;
+  position: absolute;
+  top: 420px;
+  left: 500px;
+  border-radius: 8px;
+  cursor:pointer;
+}
 .SpeeButton {
   background-color: white;
   text-align: center;

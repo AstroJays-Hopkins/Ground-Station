@@ -13,6 +13,9 @@ import AnguIcon from './angularIcon.png';
 import gpsIcon from './gpsIcon.png'
 import all from './all.png';
 import ReactSpeedometer from "react-d3-speedometer";
+import LineChart from 'react-linechart';
+import '../node_modules/react-linechart/dist/styles.css';
+import update from 'immutability-helper';
 
 // import ProgressBar from 'react-progress-bar-plus'
 
@@ -75,7 +78,21 @@ class App extends Component {
   constructor(opts){
     super(opts);
     this.state = {
+        accelData1:[
+            {									
+                color: "steelblue", 
+                points: [] 
+            }
+        ],
+        accelData2:[
+            {									
+                color: "steelblue", 
+                points: [{x: 1, y: 3}, {x: 3, y: 5}, {x: 7, y: -3}] 
+            }
+        ],
         accel: 0,
+        accelDataset: true,
+        accelDatapoint: 1,
         showAccel: false
     };
     this.AccelButton = this.AccelButton.bind(this);
@@ -104,17 +121,20 @@ class App extends Component {
     fetch('http://127.0.0.1:5000/getAcc').then(res => {
                 return res.json();
         }).then(data => {
-            this.setState({accel:data.accel})
-            });
+        this.setState({accel:data.accel})
+        }).then(data => {
+        this.setState(update(this.state,{accelData1:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.accel}]]}}}}))}).then(data => {this.setState(update(this.state,{accelDatapoint : {$apply:function(x) {return (x+1)%20;}}}))});
   }
   
   componentDidMount(){
-      this.interval = setInterval(() => this.updateAccel(),100);
+      this.interval = setInterval(() => this.updateAccel(),1000);
   }
+
   
 //WHAT IS RENDERED FOR THE USER TO SEE.
 
   render() {
+
     return (
       <div className="App">
 
@@ -148,9 +168,23 @@ class App extends Component {
         <div className = "line2">______________________________________________________________________________________________________________</div>
 
         <div className="App-intro">
+          {this.state.accelDatapoint}
+
           What readings would you like to be running? <br/>
               {this.state.showAccel &&
               <ReactSpeedometer value={this.state.accel}/>
+              }
+              {this.state.showAccel &&
+              <div className="lineChart">
+                    <LineChart 
+                        width={600}
+                        height={200}
+                        yMax = {'600'}
+                        yMin = {'450'}
+                        xMax = {'20'}
+                        data={this.state.accelData1}
+                    /> 
+                    </div>
               }
         </div>
 
