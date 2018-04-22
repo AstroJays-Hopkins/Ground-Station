@@ -70,8 +70,8 @@ def getAcc():
     """
     accel = {'accel':(np.random.rand()/10+.5)*1000}
     print(json.dumps(accel))
-    f = open("accel.txt","a+")
-    f.write(str(accel['accel'])+"\n")
+    f = open("./AvionicsData/accel.txt","a+")
+    f.write(str(json.dumps(accel))+"\n")
     f.close()
     return(json.dumps(accel))
 
@@ -84,8 +84,11 @@ def getAng():
 
         Data collected here is to be directly displayed as numbers on ReactApp.
     """
-    start = line.rindex('Angular orientation')
-    return (line[start, line.len()+1])
+    ang = {'ang':(np.random.rand()/10+.5)*1000}
+    f = open("./AvionicsData/angul.txt","a+")
+    f.write(str(ang['ang'])+"\n")
+    f.close()
+    return (json.dumps(ang))
 
 @api_app.route("/getLoc")
 @cross_origin(supports_credentials=True)

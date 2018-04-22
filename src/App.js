@@ -23,11 +23,6 @@ import update from 'immutability-helper';
 var Columns = require ('react-columns');
 const ProgressBar = require('react-progress-bar-plus');
 
-//LIST OF FUNCTIONS EXECUTED BY THE USER.
-function AllButton (AllButton) {
-  alert("This button will open all telemetry ports.")
-}
-
 function AltiButton (AltiButton) {
     var x=document.getElementById('AltiPress')
     if (x.style.display == 'block') {
@@ -42,7 +37,7 @@ function SpeeButton (SpeeButton) {
     fetch('http://127.0.0.1:5000/getAcc').then(res => {
                 return res.json();
         }).then(data => {
-            alert(data.accel)
+            data.accel
             });
     if (x.style.display == 'block') {
       x.style.display = 'none'
@@ -62,6 +57,11 @@ function gpsButton (gpsButton) {
 
 function AnguButton (AnguButton) {
     var x=document.getElementById('AnguPress')
+    fetch('http://127.0.0.1:5000/getAng').then(res => {
+                return res.json();
+        }).then(data => {
+            data.accel
+            });
     if (x.style.display == 'block') {
       x.style.display = 'none'
     } else {
@@ -69,8 +69,17 @@ function AnguButton (AnguButton) {
     }
 }
 
+//LIST OF FUNCTIONS EXECUTED BY THE USER.
+function AllButton (AllButton) {
+  var x=document.getElementById('SpeePress')
+  if (x.style.display == 'block') {
+    x.style.display = 'none'
+  } else {
+    x.style.display = 'block'
+  }
+}
 function helpButton (helpButton) {
-  alert("Help option is still under maintenance.")
+  alert("To make sure you are seeing the correct readings please connect your ARDUINO to your computer and expose it to PORT11")
 }
 ///
 
@@ -79,15 +88,15 @@ class App extends Component {
     super(opts);
     this.state = {
         accelData1:[
-            {									
-                color: "steelblue", 
-                points: [] 
+            {
+                color: "steelblue",
+                points: []
             }
         ],
         accelData2:[
-            {									
-                color: "steelblue", 
-                points: [{x: 1, y: 3}, {x: 3, y: 5}, {x: 7, y: -3}] 
+            {
+                color: "steelblue",
+                points: [{x: 1, y: 3}, {x: 3, y: 5}, {x: 7, y: -3}]
             }
         ],
         accel: 0,
@@ -116,7 +125,7 @@ class App extends Component {
   showAccel: !prevState.showAccel
 }));
   }
-  
+
   updateAccel() {
     fetch('http://127.0.0.1:5000/getAcc').then(res => {
                 return res.json();
@@ -125,12 +134,12 @@ class App extends Component {
         }).then(data => {
         this.setState(update(this.state,{accelData1:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.accel}]]}}}}))}).then(data => {this.setState(update(this.state,{accelDatapoint : {$apply:function(x) {return (x+1)%20;}}}))});
   }
-  
+
   componentDidMount(){
       this.interval = setInterval(() => this.updateAccel(),1000);
   }
 
-  
+
 //WHAT IS RENDERED FOR THE USER TO SEE.
 
   render() {
@@ -168,24 +177,6 @@ class App extends Component {
         <div className = "line2">______________________________________________________________________________________________________________</div>
 
         <div className="App-intro">
-          {this.state.accelDatapoint}
-
-          What readings would you like to be running? <br/>
-              {this.state.showAccel &&
-              <ReactSpeedometer value={this.state.accel}/>
-              }
-              {this.state.showAccel &&
-              <div className="lineChart">
-                    <LineChart 
-                        width={600}
-                        height={200}
-                        yMax = {'600'}
-                        yMin = {'450'}
-                        xMax = {'20'}
-                        data={this.state.accelData1}
-                    /> 
-                    </div>
-              }
         </div>
 
         <button onClick = {AllButton} className = "AllButton">
@@ -206,8 +197,6 @@ class App extends Component {
           <img src = {SpeedIcon}
             className = "SpeedIcon" />
         </button>
-{/*-------------------------------Speedometer-Press---------------------------------*/}
-        <div id = "SpeePress" />
 {/*-----------------------------------GPS------------------------------------*/}
         <button onClick = {gpsButton} className = "gpsButton">
           <img src = {gpsIcon}
@@ -223,7 +212,32 @@ class App extends Component {
             className = "AnguIcon" />
         </button>
 {/*---------------------------------Angular-Press---------------------------------*/}
-          <div id = "AnguPress"/>
+          <div id = "SpeePress">
+          {this.state.showAccel
+            &&
+            <div className="Readings">
+              Speedometer Readings
+            </div>
+          }
+              {this.state.showAccel
+                &&
+              <div className="Speedometer">
+                <ReactSpeedometer value={this.state.accel}/>
+              </div>
+              }
+              {this.state.showAccel &&
+              <div className="lineChart">
+                    <LineChart
+                        width={600}
+                        height={200}
+                        yMax = {'600'}
+                        yMin = {'450'}
+                        xMax = {'20'}
+                        data={this.state.accelData1}
+                    />
+                </div>
+              }
+          </div>
           </div>
     );
   }
