@@ -4,6 +4,8 @@ from flask import send_file
 import serial
 import os
 import base64
+import json
+import numpy as np
 
 
 api_app = Flask(__name__)
@@ -18,7 +20,7 @@ def home():
         Change Timeout to read more data points.
     """
     port = '/dev/ttyS0'
-    line = serial.Serial(port,9600,timeout=0)'
+    line = serial.Serial(port,9600,timeout=0)
     line = "Altitude:0.00 Acceleration:-1.00 -1.00 -0.60 Angular orientation:4 4 4"
     print(line)
     with serial.Serial(port, 9600, timeout=0) as ser:
@@ -66,7 +68,12 @@ def getAcc():
 
         Data collected here will be displayed as rising and lowering bar graph.
     """
-    return ("Still in the makes")
+    accel = {'accel':(np.random.rand()/10+.5)*1000}
+    print(json.dumps(accel))
+    f = open("accel.txt","a+")
+    f.write(str(accel['accel'])+"\n")
+    f.close()
+    return(json.dumps(accel))
 
 @api_app.route("/getAng")
 @cross_origin(supports_credentials=True)
