@@ -6,7 +6,7 @@ import os
 import base64
 import json
 import numpy as np
-
+from datetime import datetime
 
 api_app = Flask(__name__)
 CORS(api_app, support_credentials=True)
@@ -57,7 +57,14 @@ def getAlt():
 
         Data collected here will be used in the ReactApp to create an altitude graph.
     """
-    return ("Still in the makes")
+    line = "Altitude:0.00 Acceleration:-1.00 -1.00 -0.60 Angular orientation:4 4 4"
+    altitude = (line.split()[0].split(":")[1])
+    alti = {'alti':round((np.random.rand())*1000, 2)}
+    f = open("./AvionicsData/alti.txt","a+")
+    f.write(str(alti['alti']) + "\t" + str(datetime.now().time()) + "\n")
+    f.close()
+    return(json.dumps(alti))
+
 
 @api_app.route("/getAcc")
 @cross_origin(supports_credentials=True)
@@ -102,3 +109,15 @@ def getLoc():
         ReactApp.
     """
     return ("Still in the makes")
+
+@api_app.route("/getTime")
+@cross_origin(supports_credentials=True)
+def getTime():
+    """
+        Method to get the current time.
+        This Method is activated only when the url /getTime is accessed.
+
+        Data collected here will be used in the ReactApp to create live graphs over time.
+    """
+    time = {'time':str(datetime.now().time())}
+    return(json.dumps(time))

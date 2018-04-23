@@ -12,6 +12,8 @@
 
 .App-header {
   /*animation: pulse 10s;*/
+  top: 0;
+  z-index: 1;
   height: 80px;
   padding: 5px;
   background-color:  #0a2342;
@@ -116,11 +118,25 @@
   cursor:pointer;
   height:220px;
 }
+
+.Altimeter {
+  background-color: none;
+  text-align: center;
+  float: center;
+  padding-top: 0px;
+  padding-left: 150px;
+  padding-bottom: 0px;
+  top: 880px;
+  left: 100px;
+  border-radius: 8px;
+}
+
 .AltiButton:hover{
   background: lightblue;
   cursor:pointer;
   background: lightblue;
 }
+
 .lineChart {
   background-color: none;
   text-align: center;
@@ -133,6 +149,20 @@
   left: 500px;
   border-radius: 8px;
 }
+
+.lineChartAlti {
+  background-color: none;
+  text-align: center;
+  float: center;
+  padding-top: 0px;
+  padding-left: 50px;
+  padding-bottom: 0px;
+  position: absolute;
+  top: 1200px;
+  left: 500px;
+  border-radius: 8px;
+}
+
 .Speedometer {
   background-color: none;
   text-align: center;
@@ -145,6 +175,7 @@
   left: 100px;
   border-radius: 8px;
 }
+
 .SpeeButton {
   background-color: white;
   text-align: center;
