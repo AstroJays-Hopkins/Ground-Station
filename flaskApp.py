@@ -119,5 +119,6 @@ def getTime():
 
         Data collected here will be used in the ReactApp to create live graphs over time.
     """
-    time = {'time':str(datetime.now().time())}
+    day = datetime.today().strftime("%B %d, %Y")
+    time = {'day':str(day),'time':str(datetime.now().time())}
     return(json.dumps(time))

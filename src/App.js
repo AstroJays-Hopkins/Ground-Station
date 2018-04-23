@@ -119,6 +119,7 @@ class App extends Component {
         accel: 0,
         alti: 0,
         time: 0,
+        day: "Today's Date",
         accelDataset: true,
         accelDatapoint: 1,
         altiDataset: true,
@@ -177,7 +178,7 @@ class App extends Component {
       fetch('http://127.0.0.1:5000/getTime').then(res => {
           return res.json();
       }).then(data => {
-      this.setState({time:data.time})
+      this.setState({time:data.time,day:data.day})
       });
   }
 
@@ -215,7 +216,7 @@ class App extends Component {
          <div className = "line2">______________________________________________________________________________________________________________</div>
         <div className = "Updates2">
           Currently Under Development
-            <div className = "date">April 22, 2018</div>
+            <div className = "date">{this.state.day}</div>
             <div className = "message">This web interface is currently undergoing maintenance.</div>
         </div>
 
