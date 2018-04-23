@@ -11,6 +11,32 @@ import numpy as np
 api_app = Flask(__name__)
 CORS(api_app, support_credentials=True)
 
+port = '/dev/cu.usbmodem1411'
+ser = serial.Serial(port,9600, bytesize=8, parity=serial.PARITY_NONE, stopbits=1, timeout=2)
+
+
+def get_data():
+    ibuffer = ""  # Buffer for raw data waiting to be processed
+    while True:
+        time.sleep(.1)  # Best between .1 and 1
+        data = ser.read(4096)  # May need to adjust read size
+        print(data)
+        ibuffer += data  # Concat data sets that were possibly split during reading
+        if '\r\n' in ibuffer:  # If complete data set
+            line, ibuffer = ibuffer.split('\r\n', 1)  # Split off first completed set
+            yield line.strip('\r\n')  # Sanitize and Yield data
+
+ser_data = get_data()
+while True:
+    data = ser_data.next().replace(' ','').split(',')
+
+    if len(data) > 0:
+        """
+        data processing down here
+
+        """
+ser.close()
+
 @api_app.route("/")
 @cross_origin(supports_credentials=True)
 def home():
@@ -19,22 +45,6 @@ def home():
         This code will continuously run while the GUI is working
         Change Timeout to read more data points.
     """
-    port = '/dev/ttyS0'
-    line = serial.Serial(port,9600,timeout=0)
-    line = "Altitude:0.00 Acceleration:-1.00 -1.00 -0.60 Angular orientation:4 4 4"
-    print(line)
-    with serial.Serial(port, 9600, timeout=0) as ser:
-        # x = ser.read() #Written to read one byte
-        line = ser.readline()
-        print(line)
-        altitude = 1
-        x_acc = 1
-        y_acc = 1
-        z_acc = 1
-        x_ang = 1
-        y_ang = 1
-        z_ang = 1
-
     return "The telemetry reading is hidden here"
 
 @api_app.route("/getTelem")
