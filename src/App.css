@@ -119,18 +119,6 @@
   height:220px;
 }
 
-.Altimeter {
-  background-color: none;
-  text-align: center;
-  float: center;
-  padding-top: 0px;
-  padding-left: 150px;
-  padding-bottom: 0px;
-  top: 880px;
-  left: 100px;
-  border-radius: 8px;
-}
-
 .AltiButton:hover{
   background: lightblue;
   cursor:pointer;
@@ -140,39 +128,20 @@
 .lineChart {
   background-color: none;
   text-align: center;
-  float: center;
+  float: right;
   padding-top: 0px;
-  padding-left: 50px;
+  padding-right: 100px;
   padding-bottom: 0px;
-  position: absolute;
-  top: 870px;
-  left: 500px;
-  border-radius: 8px;
-}
-
-.lineChartAlti {
-  background-color: none;
-  text-align: center;
-  float: center;
-  padding-top: 0px;
-  padding-left: 50px;
-  padding-bottom: 0px;
-  position: absolute;
-  top: 1200px;
-  left: 500px;
   border-radius: 8px;
 }
 
 .Speedometer {
   background-color: none;
   text-align: center;
-  float: center;
+  float: left;
   padding-top: 0px;
-  padding-left: 50px;
+  padding-left: 150px;
   padding-bottom: 0px;
-  position: absolute;
-  top: 880px;
-  left: 100px;
   border-radius: 8px;
 }
 

@@ -61,7 +61,7 @@ def getAlt():
     altitude = (line.split()[0].split(":")[1])
     alti = {'alti':round((np.random.rand())*1000, 2)}
     f = open("./AvionicsData/alti.txt","a+")
-    f.write(str(alti['alti']) + "\t" + str(datetime.now().time()) + "\n")
+    f.write(str(alti['alti']) + "\t" + str(datetime.today().isoformat(' ')) + "\n")
     f.close()
     return(json.dumps(alti))
 
@@ -76,9 +76,8 @@ def getAcc():
         Data collected here will be displayed as rising and lowering bar graph.
     """
     accel = {'accel':(np.random.rand()/10+.5)*1000}
-    print(json.dumps(accel))
     f = open("./AvionicsData/accel.txt","a+")
-    f.write(str(json.dumps(accel))+"\n")
+    f.write(str(accel['accel']) + "\t" + str(datetime.today().isoformat(' ')) + "\n")
     f.close()
     return(json.dumps(accel))
 
@@ -119,6 +118,7 @@ def getTime():
 
         Data collected here will be used in the ReactApp to create live graphs over time.
     """
-    day = datetime.today().strftime("%B %d, %Y")
-    time = {'day':str(day),'time':str(datetime.now().time())}
+    # day = datetime.today().strftime("%B %d, %Y")
+    day = datetime.today().isoformat(' ')
+    time = {'time':str(day)}
     return(json.dumps(time))

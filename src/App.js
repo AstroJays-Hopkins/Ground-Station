@@ -119,7 +119,6 @@ class App extends Component {
         accel: 0,
         alti: 0,
         time: 0,
-        day: "Today's Date",
         accelDataset: true,
         accelDatapoint: 1,
         altiDataset: true,
@@ -178,7 +177,7 @@ class App extends Component {
       fetch('http://127.0.0.1:5000/getTime').then(res => {
           return res.json();
       }).then(data => {
-      this.setState({time:data.time,day:data.day})
+      this.setState({time:data.time})
       });
   }
 
@@ -216,7 +215,7 @@ class App extends Component {
          <div className = "line2">______________________________________________________________________________________________________________</div>
         <div className = "Updates2">
           Currently Under Development
-            <div className = "date">{this.state.day}</div>
+            <div className = "date"> April 23, 2018 </div>
             <div className = "message">This web interface is currently undergoing maintenance.</div>
         </div>
 
@@ -274,6 +273,7 @@ class App extends Component {
               {this.state.showAccel &&
               <div className="lineChart">
                     <LineChart
+                        id="speed-chart"
                         width={600}
                         height={200}
                         yMax = {'600'}
@@ -287,58 +287,40 @@ class App extends Component {
 
 {/*---------------------------------Altimeter-Press---------------------------------*/}
             <div id = "AltiPress">
-            {this.state.showAlti
-              &&
-              <div className="Readings">
-                Altimeter Readings
-              </div>
-            }
-
-            {this.state.showAlti
-              &&
-              <div className="Altimeter">
-                  <div style={{width: "300px", height: "300px"}}>
-                      {this.state.showAlti &&
-                          <ReactSpeedometer
-                              fluidWidth
-                              value={this.state.alti}
-                              startColor="green"
-                              endColor="blue"
-                              segments={10}
-                              textColor="gray"
-                              needleColor="red"
-                              currentValueText="${value}"
-                          />
-                      }
+                {this.state.showAlti
+                  &&
+                  <div className="Readings">
+                    Altimeter Readings
                   </div>
-              </div>
-            }
+                }
+                {this.state.showAlti
+                  &&
+                  <div className="Speedometer">
+                      <ReactSpeedometer
+                          value={this.state.alti}
+                          startColor="green"
+                          endColor="blue"
+                          segments={10}
+                          textColor="gray"
+                          needleColor="red"
+                          currentValueText="${value}"
+                      />
+                  </div>
+                }
 
-            {this.state.showAlti && this.state.showAccel &&
-            <div className="lineChartAlti">
-                  <LineChart
-                      width={600}
-                      height={300}
-                      yMax = {'1000'}
-                      yMin = {'0'}
-                      xMax = {'20'}
-                      data={this.state.altiData1}
-                  />
-              </div>
-            }
-
-            {this.state.showAlti && !this.state.showAccel &&
-            <div className="lineChart">
-                  <LineChart
-                      width={600}
-                      height={300}
-                      yMax = {'1000'}
-                      yMin = {'0'}
-                      xMax = {'20'}
-                      data={this.state.altiData1}
-                  />
-              </div>
-            }
+                {this.state.showAlti &&
+                    <div className="lineChart">
+                          <LineChart
+                              id="alti-chart"
+                              width={600}
+                              height={300}
+                              yMax = {'1000'}
+                              yMin = {'0'}
+                              xMax = {'20'}
+                              data={this.state.altiData1}
+                          />
+                      </div>
+                }
         </div>
      </div>
     );
