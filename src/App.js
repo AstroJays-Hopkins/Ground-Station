@@ -13,7 +13,6 @@ import AnguIcon from './angularIcon.png';
 import gpsIcon from './gpsIcon.png'
 import all from './all.png';
 import ReactSpeedometer from "react-d3-speedometer";
-import '../node_modules/react-linechart/dist/styles.css';
 import update from 'immutability-helper';
 import {LineChart} from 'react-easy-chart';
 
@@ -22,52 +21,6 @@ import {LineChart} from 'react-easy-chart';
 // List of GLobal variables
 var Columns = require ('react-columns');
 const ProgressBar = require('react-progress-bar-plus');
-
-function AltiButton (AltiButton) {
-    var x=document.getElementById('AltiPress')
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
-}
-
-function SpeeButton (SpeeButton) {
-    var x=document.getElementById('SpeePress')
-    fetch('http://127.0.0.1:5000/getAcc').then(res => {
-                return res.json();
-        }).then(data => {
-            data.accel
-            });
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
-}
-
-function gpsButton (gpsButton) {
-    var x=document.getElementById('gpsPress')
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
-}
-
-function AnguButton (AnguButton) {
-    var x=document.getElementById('AnguPress')
-    fetch('http://127.0.0.1:5000/getAng').then(res => {
-                return res.json();
-        }).then(data => {
-            data.accel
-            });
-    if (x.style.display == 'block') {
-      x.style.display = 'none'
-    } else {
-      x.style.display = 'block'
-    }
-}
 
 //LIST OF FUNCTIONS EXECUTED BY THE USER.
 function AllButton (AllButton) {
@@ -167,6 +120,12 @@ class App extends Component {
 }));
   }
 
+  GpsButton () {
+  }
+
+  AllButton () {
+  }
+
   updateAccel() {
     fetch('http://127.0.0.1:5000/getAcc').then(res => {
                 return res.json();
@@ -202,6 +161,7 @@ class App extends Component {
       <div className="App">
 
         <div className="App-header">
+	<div className="Logo">
           <img src={AstroJLogo} className="AstroJLogo"/>
           <button onClick = {helpButton} className = "helpButton">
             Help
@@ -213,27 +173,19 @@ class App extends Component {
         <div className = "title2">
           Tracking your telemetry readings since today.
         </div>
-        <div className = "line1">____________________________________________________________________________________________________________________________</div>
-
-        <div className= "Updates">
-          Announcements:
-        </div>
-         <div className = "line2">______________________________________________________________________________________________________________</div>
-        <div className = "Updates2">
-          Currently Under Development
-            <div className = "date">February 10, 2018</div>
-            <div className = "message">This web interface is currently undergoing maintenance.</div>
-        </div>
+	</div>
+        <div className = "line1">______________________________________________________________________________________________________________________________________</div>
 
         <div className="Updates">
           Telemetry
         </div>
-        <div className = "line2">______________________________________________________________________________________________________________</div>
+        <div className = "line2">________________________________________________________________________________________________________________________________________________________</div>
 
         <div className="App-intro">
         </div>
 
-        <button onClick = {AllButton} className = "AllButton">
+	<div className = "Buttons">
+        <button onClick = {this.AllButton} className = "AllButton">
           <img src = {all}
             className = "all" />
         </button>
@@ -251,21 +203,14 @@ class App extends Component {
           <img src = {SpeedIcon}
             className = "SpeedIcon" />
         </button>
-{/*-----------------------------------GPS------------------------------------*/}
-        <button onClick = {gpsButton} className = "gpsButton">
-          <img src = {gpsIcon}
-            className = "gpsIcon" />
-        </button>
-{/*---------------------------------GPS-Press---------------------------------*/}
-          <div id = "gpsPress">
-
-          </div>
 {/*-----------------------------------Angular------------------------------------*/}
         <button onClick = {this.AnglButton} className = "AnguButton">
           <img src = {AnguIcon}
             className = "AnguIcon" />
         </button>
 {/*---------------------------------Angular-Press---------------------------------*/}
+	</div>
+
           <div id = "SpeePress">
           {this.state.showAccel
             &&
@@ -284,7 +229,17 @@ class App extends Component {
                 Acceleration in Z-axis
                 <ReactSpeedometer value={this.state.accel[2]}/>
                 </div>
-		}
+		}{this.state.showAngl 
+		&&
+		<div className="AnglSpeedometer">
+		Angle in first axis
+                <ReactSpeedometer value={this.state.angl[0]} minValue="-180" maxValue="180"/>
+                Angle in second axis
+                <ReactSpeedometer value={this.state.angl[1]} minValue="-180" maxValue="180"/>
+                Angle in third axis
+                <ReactSpeedometer value={this.state.angl[2]} minValue="-180" maxValue="180"/>
+              </div>
+              }
 		{this.state.showAlt
 		&&
 		<div className="AltSpeedometer">
@@ -292,17 +247,6 @@ class App extends Component {
                 <ReactSpeedometer value={this.state.altitude}/>
                 </div>
 		}
-		{this.state.showAngl 
-		&&
-		<div className="AnglSpeedometer">
-		Angle in first axis
-                <ReactSpeedometer value={this.state.angl[0]}/>
-                Angle in second axis
-                <ReactSpeedometer value={this.state.angl[1]}/>
-                Angle in third axis
-                <ReactSpeedometer value={this.state.angl[2]}/>
-              </div>
-              }
 	</div>
               <div className="lineChart"> 
 		{this.state.showAccel && 
