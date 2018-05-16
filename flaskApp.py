@@ -11,8 +11,8 @@ import numpy as np
 api_app = Flask(__name__)
 CORS(api_app, support_credentials=True)
 
-port = '/dev/cu.usbmodem1411'
-ser = serial.Serial(port,9600, bytesize=8, parity=serial.PARITY_NONE, stopbits=1, timeout=2)
+#port = '/dev/cu.usbmodem1411'
+#ser = serial.Serial(port,9600, bytesize=8, parity=serial.PARITY_NONE, stopbits=1, timeout=2)
 
 
 def get_data():
@@ -25,7 +25,7 @@ def get_data():
         if '\r\n' in ibuffer:  # If complete data set
             line, ibuffer = ibuffer.split('\r\n', 1)  # Split off first completed set
             yield line.strip('\r\n')  # Sanitize and Yield data
-
+'''
 ser_data = get_data()
 while True:
     data = ser_data.next().replace(' ','').split(',')
@@ -36,7 +36,7 @@ while True:
 
         """
 ser.close()
-
+'''
 @api_app.route("/")
 @cross_origin(supports_credentials=True)
 def home():
@@ -78,7 +78,7 @@ def getAcc():
 
         Data collected here will be displayed as rising and lowering bar graph.
     """
-    accel = {'accel':(np.random.rand()/10+.5)*1000}
+    accel = {'altitude':(np.random.rand()/10+.5)*1000, 'accel':[(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000], 'angl':[(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000]}
     print(json.dumps(accel))
     f = open("./AvionicsData/accel.txt","a+")
     f.write(str(json.dumps(accel))+"\n")
