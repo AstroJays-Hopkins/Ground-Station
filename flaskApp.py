@@ -6,6 +6,7 @@ import os
 import base64
 import json
 import numpy as np
+from datetime import datetime
 
 
 api_app = Flask(__name__)
@@ -78,10 +79,10 @@ def getAcc():
 
         Data collected here will be displayed as rising and lowering bar graph.
     """
-    accel = {'altitude':(np.random.rand()/10+.5)*1000, 'accel':[(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000], 'angl':[(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000]}
+    accel = {'altitude':(np.random.rand()/10+.5)*1000, 'accel':[(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000,(np.random.rand()/10+.5)*1000], 'angl':[(np.random.rand())*90-45,np.random.rand()*90-45,np.random.rand()*90-45],'gps':[np.random.rand()*90-45,np.random.rand()*90-45]}
     print(json.dumps(accel))
     f = open("./AvionicsData/accel.txt","a+")
-    f.write(str(json.dumps(accel))+"\n")
+    f.write(str(datetime.today().isoformat(' ')) + "\t" + str(json.dumps(accel))+"\n")
     f.close()
     return(json.dumps(accel))
 

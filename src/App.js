@@ -22,15 +22,6 @@ import {LineChart} from 'react-easy-chart';
 var Columns = require ('react-columns');
 const ProgressBar = require('react-progress-bar-plus');
 
-//LIST OF FUNCTIONS EXECUTED BY THE USER.
-function AllButton (AllButton) {
-  var x=document.getElementById('SpeePress')
-  if (x.style.display == 'block') {
-    x.style.display = 'none'
-  } else {
-    x.style.display = 'block'
-  }
-}
 function helpButton (helpButton) {
   alert("To make sure you are seeing the correct readings please connect your ARDUINO to your computer and expose it to PORT11")
 }
@@ -76,10 +67,13 @@ class App extends Component {
             }
         ],
         accel: [0,0,0],
+	prevaltitude:0,
 	altitude: 0,
 	angl: [0, 0, 0],
+	gps: [0,0],
         accelDataset: true,
-        accelDatapoint: 0,
+        accelDatapoint: 1,
+	apagy:false,
         showAccel: false,
 	showAlt: false,
 	showAngl: false,
@@ -87,19 +81,7 @@ class App extends Component {
     this.AccelButton = this.AccelButton.bind(this);
     this.AltButton = this.AltButton.bind(this);
     this.AnglButton = this.AnglButton.bind(this);
-  }
-
-  //Fetch Telemetry Data
-  fetchTelem() {
-    fetch("http://127.0.0.1:5000/getTelem/")
-    .then(res => res.text())
-    .then(res=> {
-        this.setState({
-            image: res,
-            })
-    var status = this.state.image
-    alert("Telemetry Incoming...")
-    })
+    this.AllButton = this.AllButton.bind(this);
   }
 
   AccelButton () {
@@ -119,11 +101,20 @@ class App extends Component {
   showAngl: !prevState.showAngl
 }));
   }
-
-  GpsButton () {
-  }
-
+  
   AllButton () {
+    if(this.state.showAccel && this.state.showAlt && this.state.showAngl){
+	this.setState({
+		showAccel: false,
+		showAlt: false,
+		showAngl: false});
+	}
+    else{
+	this.setState({
+		showAccel: true,
+		showAlt: true,
+		showAngl: true});
+	}
   }
 
   updateAccel() {
@@ -133,19 +124,24 @@ class App extends Component {
         this.setState({
 		accel:data.accel,
 		altitude:data.altitude,
-		angl: data.angl
+		angl: data.angl,
+		gps: data.gps,
+		prevaltitude:this.state.altitude
 	})
         }).then(data => {
-        console.log(this.state.accelDataX[0].points);
-        this.setState(update(this.state,{accelDataX:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.accel[0]}]]}}}}));
-        this.setState(update(this.state,{accelDataY:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.accel[1]}]]}}}}));  
-        this.setState(update(this.state,{accelDataZ:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.accel[2]}]]}}}}))
-        this.setState(update(this.state,{altitudeData:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.altitude}]]}}}}))
-        this.setState(update(this.state,{anglData1:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.angl[0]}]]}}}}))
-        this.setState(update(this.state,{anglData2:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.angl[1]}]]}}}}))
-        this.setState(update(this.state,{anglData3:{0:{points:{$splice:[[this.state.accelDatapoint,1,{x:this.state.accelDatapoint,y:this.state.angl[2]}]]}}}}))
+       this.setState(update(this.state,{accelDataX:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.accel[0]}]]}}}}));
+        this.setState(update(this.state,{accelDataY:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.accel[1]}]]}}}}));  
+        this.setState(update(this.state,{accelDataZ:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.accel[2]}]]}}}}))
+        this.setState(update(this.state,{altitudeData:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.altitude}]]}}}}))
+        this.setState(update(this.state,{anglData1:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.angl[0]}]]}}}}))
+        this.setState(update(this.state,{anglData2:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.angl[1]}]]}}}}))
+        this.setState(update(this.state,{anglData3:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.angl[2]}]]}}}}))
 
-	}).then(data => {this.setState(update(this.state,{accelDatapoint : {$apply:function(x) {return (x+1)%20;}}}))});
+	}).then(data => {
+	this.setState(update(this.state,{accelDatapoint : {$apply:function(x) {return (x)%20+1;}}}));
+	this.setState({apagy:this.state.altitude < this.state.prevaltitude});
+	console.log(this.state.accelDatapoint,this.state.accelDataX[0].points);
+	});
   }
 
   componentDidMount(){
@@ -169,46 +165,43 @@ class App extends Component {
         </div>
         <div className = "title">
           Avionics Telemetry
-        </div>
+	</div>
         <div className = "title2">
           Tracking your telemetry readings since today.
         </div>
+	<div className = "gps">
+	  GPS Coordinates: {this.state.gps[0]}, {this.state.gps[1]}
 	</div>
-        <div className = "line1">______________________________________________________________________________________________________________________________________</div>
-
-        <div className="Updates">
-          Telemetry
-        </div>
-        <div className = "line2">________________________________________________________________________________________________________________________________________________________</div>
-
+	<div className = "apagy">
+	Direction: {this.state.apagy && "UP"}{!this.state.apagy && "DOWN"}
+	</div>
+	</div>
         <div className="App-intro">
         </div>
 
 	<div className = "Buttons">
+
         <button onClick = {this.AllButton} className = "AllButton">
           <img src = {all}
             className = "all" />
         </button>
-{/*-----------------------------------Altemeter------------------------------------*/}
-        <button onClick = {this.AltButton} className = "AltiButton">
+
+	<button onClick = {this.AltButton} className = "AltiButton">
           <img src = {AltiIcon}
             className = "AltiIcon" />
         </button>
-{/*---------------------------------Altimeter-Press---------------------------------*/}
-          <div id = "AltiPress">
-
-          </div>
-{/*-----------------------------------Speedometer-----------------------------------*/}
-        <button onClick = {this.AccelButton} className = "SpeeButton">
+	
+	<button onClick = {this.AccelButton} className = "SpeeButton">
           <img src = {SpeedIcon}
             className = "SpeedIcon" />
         </button>
-{/*-----------------------------------Angular------------------------------------*/}
-        <button onClick = {this.AnglButton} className = "AnguButton">
+        
+	<button onClick = {this.AnglButton} className = "AnguButton">
           <img src = {AnguIcon}
             className = "AnguIcon" />
         </button>
-{/*---------------------------------Angular-Press---------------------------------*/}
+
+
 	</div>
 
           <div id = "SpeePress">
@@ -257,7 +250,7 @@ class App extends Component {
                     axes
                     xDomainRange={[0,20]}
                     yDomainRange={[450,600]}
-                    data={[this.state.accelDataX[0].points]}
+                    data={[this.state.accelDataX[0].points.slice(this.state.accelDatapoint-1,20),this.state.accelDataX[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
 
@@ -269,8 +262,8 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.accelDataY[0].points]}
+                    yDomainRange={[450,600]} 
+                    data={[this.state.accelDataY[0].points.slice(this.state.accelDatapoint-1,20),this.state.accelDataY[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                         height={200}
 
@@ -281,8 +274,8 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.accelDataZ[0].points]}
+                    yDomainRange={[450,600]}  
+                    data={[this.state.accelDataZ[0].points.slice(this.state.accelDatapoint-1,20),this.state.accelDataZ[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
                   />
@@ -296,7 +289,7 @@ class App extends Component {
                     axes
                     xDomainRange={[0,20]}
                     yDomainRange={[450,600]}
-                    data={[this.state.altitudeData[0].points]}
+                    data={[this.state.altitudeData[0].points.slice(this.state.accelDatapoint-1,20),this.state.altitudeData[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
                   />
@@ -309,8 +302,8 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.anglData1[0].points]}
+                    yDomainRange={[-180,180]}
+                    data={[this.state.anglData1[0].points.slice(this.state.accelDatapoint-1,20),this.state.anglData1[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
                   />
@@ -320,8 +313,8 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.anglData2[0].points]}
+                    yDomainRange={[-180,180]}
+                    data={[this.state.anglData2[0].points.slice(this.state.accelDatapoint-1,20),this.state.anglData2[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
                   />
@@ -331,8 +324,8 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.anglData3[0].points]}
+                    yDomainRange={[-180,180]}
+                    data={[this.state.anglData3[0].points.slice(this.state.accelDatapoint-1,20),this.state.anglData3[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
                   />

@@ -46,6 +46,19 @@
   left:15px;
   z-index:2;
 }
+.gps{
+  font-size: 20px;
+  color:white;
+  position:absolute;
+  top:40px;
+  left: 750px;
+}
+.apagy{
+  font-size:20px;
+  position:absolute;
+  top:100px;
+  left:5px;
+}
 .line1{
   color: lightgrey;
   padding-top: 20px;
@@ -118,7 +131,7 @@
   float: left;
   position: absolute;
   right:0px;
-  top: 0px;
+  top: 5px;
   border-radius: 8px;
   cursor:pointer;
 }
@@ -133,7 +146,7 @@
   background-color: white;
   text-align: center;
   position: absolute;
-  top: 68px;
+  top: 75px;
   right: 0px;
   border-radius: 8px;
   cursor:pointer;
@@ -152,7 +165,7 @@
   padding-left: 50px;
   padding-bottom: 0px;
   position: absolute;
-  top: 350px;
+  top: 120px;
   left: 500px;
   border-radius: 8px;
 }
@@ -185,7 +198,7 @@
   padding-left: 50px;
   padding-bottom: 0px;
   position: absolute;
-  top: 350px;
+  top: 120px;
   left: 100px;
   border-radius: 8px;
 }
@@ -194,7 +207,7 @@
   text-align: center;
   float: center;
   position: absolute;
-  top: 289px;
+  top: 300px;
   right: 0px;
   border-radius: 8px;
   cursor:pointer;
@@ -215,7 +228,7 @@
   padding-top: 20px;
   padding-left: 10px;
   position: absolute;
-  top: 510px;
+  top: 525px;
   right: 0px;
   border-radius: 8px;
   cursor:pointer;
