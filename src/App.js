@@ -27,6 +27,28 @@ function helpButton (helpButton) {
 }
 ///
 
+function stage1(props){
+	return <p>Stage 1</p>;
+}
+function stageRender(props) {
+	const cur = props.cur;
+	if (cur == 1) {
+		return <stage1 />;
+	}
+	else if (cur == 2){
+		return "Stage2";
+	}
+	else if (cur == 3){
+		return "Stage3";
+	}
+	else if (cur == 4){
+		return "Stage4";
+	}
+	else if (cur == 5){
+		return "Stage5";
+	}
+}
+
 class App extends Component {
   constructor(opts){
     super(opts);
@@ -77,6 +99,7 @@ class App extends Component {
         showAccel: false,
 	showAlt: false,
 	showAngl: false,
+	stage:"Stage1",
     };
     this.AccelButton = this.AccelButton.bind(this);
     this.AltButton = this.AltButton.bind(this);
@@ -147,10 +170,7 @@ class App extends Component {
   componentDidMount(){
       this.interval = setInterval(() => this.updateAccel(),1000);
   }
-
-
 //WHAT IS RENDERED FOR THE USER TO SEE.
-
   render() {
 
     return (
@@ -173,7 +193,16 @@ class App extends Component {
 	  GPS Coordinates: {this.state.gps[0]}, {this.state.gps[1]}
 	</div>
 	<div className = "apagy">
-	Direction: {this.state.apagy && "UP"}{!this.state.apagy && "DOWN"}
+	<div>Direction: {this.state.apagy && "ASCENDING"}{!this.state.apagy && "DESCENDING"}</div>
+	<div>Stage: <div>
+          {{
+              Stage1: "Stage1",
+              Stage2: <p>Stage2</p>,
+              Stage3: <p>Stage3</p>,
+              Stage4: <p>Stage4</p>,
+              Stage5: <p>Stage5</p>,
+          }[this.state.stage]}
+      </div></div>
 	</div>
 	</div>
         <div className="App-intro">
@@ -211,8 +240,16 @@ class App extends Component {
               Speedometer Readings
             </div>
           }
-	<div className = "Speedometer">
-              {this.state.showAccel
+	<div className = "Speedometer"> 
+		{this.state.showAlt
+		&&
+		<div className="AltSpeedometer">
+		Altitude
+                <ReactSpeedometer value={this.state.altitude}/>
+                </div>
+		}
+		
+		{this.state.showAccel
                 &&
               <div className="AccelSpeedometer">
                 Acceleration in X-axis
@@ -222,7 +259,9 @@ class App extends Component {
                 Acceleration in Z-axis
                 <ReactSpeedometer value={this.state.accel[2]}/>
                 </div>
-		}{this.state.showAngl 
+		}
+
+		{this.state.showAngl 
 		&&
 		<div className="AnglSpeedometer">
 		Angle in first axis
@@ -233,15 +272,21 @@ class App extends Component {
                 <ReactSpeedometer value={this.state.angl[2]} minValue="-180" maxValue="180"/>
               </div>
               }
-		{this.state.showAlt
-		&&
-		<div className="AltSpeedometer">
-		Altitude
-                <ReactSpeedometer value={this.state.altitude}/>
-                </div>
-		}
 	</div>
-              <div className="lineChart"> 
+              <div className="lineChart"> 	
+              {this.state.showAlt &&  
+		<div className="fourthChart">
+                Altitude
+                  <LineChart 
+                    axes
+                    xDomainRange={[0,20]}
+                    yDomainRange={[450,600]}
+                    data={[this.state.altitudeData[0].points.slice(this.state.accelDatapoint-1,20),this.state.altitudeData[0].points.slice(0,this.state.accelDatapoint-1)]}
+                    width={500}
+                    height={200}
+                  />
+                  </div>
+                 }
 		{this.state.showAccel && 
                 <div className="accelCharts">
 		<div className="firstChart">
@@ -282,19 +327,6 @@ class App extends Component {
                   </div> 
 		</div>
 		}
-              {this.state.showAlt &&  
-		<div className="fourthChart">
-                Altitude
-                  <LineChart 
-                    axes
-                    xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
-                    data={[this.state.altitudeData[0].points.slice(this.state.accelDatapoint-1,20),this.state.altitudeData[0].points.slice(0,this.state.accelDatapoint-1)]}
-                    width={500}
-                    height={200}
-                  />
-                  </div>
-                 }
               {this.state.showAngl &&
 		<div className="anglCharts">
 		 <div className="fifthChart"> 
