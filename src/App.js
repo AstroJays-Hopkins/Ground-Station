@@ -27,28 +27,6 @@ function helpButton (helpButton) {
 }
 ///
 
-function stage1(props){
-	return <p>Stage 1</p>;
-}
-function stageRender(props) {
-	const cur = props.cur;
-	if (cur == 1) {
-		return <stage1 />;
-	}
-	else if (cur == 2){
-		return "Stage2";
-	}
-	else if (cur == 3){
-		return "Stage3";
-	}
-	else if (cur == 4){
-		return "Stage4";
-	}
-	else if (cur == 5){
-		return "Stage5";
-	}
-}
-
 class App extends Component {
   constructor(opts){
     super(opts);
@@ -95,11 +73,11 @@ class App extends Component {
 	gps: [0,0],
         accelDataset: true,
         accelDatapoint: 1,
-	apagy:false,
+	ascend:false,
+	descend:false,
         showAccel: false,
 	showAlt: false,
 	showAngl: false,
-	stage:"Stage1",
     };
     this.AccelButton = this.AccelButton.bind(this);
     this.AltButton = this.AltButton.bind(this);
@@ -150,7 +128,10 @@ class App extends Component {
 		angl: data.angl,
 		gps: data.gps,
 		prevaltitude:this.state.altitude
-	})
+	});
+	this.setState(update(this.state,{angl:{0:{$apply:function(x){return 2*(x%180)-x}}}}));
+	this.setState(update(this.state,{angl:{1:{$apply:function(x){return 2*(x%180)-x}}}}));
+	this.setState(update(this.state,{angl:{2:{$apply:function(x){return 2*(x%180)-x}}}}));
         }).then(data => {
        this.setState(update(this.state,{accelDataX:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.accel[0]}]]}}}}));
         this.setState(update(this.state,{accelDataY:{0:{points:{$splice:[[this.state.accelDatapoint-1,1,{x:this.state.accelDatapoint,y:this.state.accel[1]}]]}}}}));  
@@ -162,7 +143,8 @@ class App extends Component {
 
 	}).then(data => {
 	this.setState(update(this.state,{accelDatapoint : {$apply:function(x) {return (x)%20+1;}}}));
-	this.setState({apagy:this.state.altitude < this.state.prevaltitude});
+	this.setState({ascend:this.state.altitude < this.state.prevaltitude});
+	this.setState({descend:this.state.altitude > this.state.prevaltitude});
 	console.log(this.state.accelDatapoint,this.state.accelDataX[0].points);
 	});
   }
@@ -193,16 +175,7 @@ class App extends Component {
 	  GPS Coordinates: {this.state.gps[0]}, {this.state.gps[1]}
 	</div>
 	<div className = "apagy">
-	<div>Direction: {this.state.apagy && "ASCENDING"}{!this.state.apagy && "DESCENDING"}</div>
-	<div>Stage: <div>
-          {{
-              Stage1: "Stage1",
-              Stage2: <p>Stage2</p>,
-              Stage3: <p>Stage3</p>,
-              Stage4: <p>Stage4</p>,
-              Stage5: <p>Stage5</p>,
-          }[this.state.stage]}
-      </div></div>
+	<div>Direction: {this.state.ascend && "ASCENDING"}{this.state.descend && "DESCENDING"}{!this.state.ascend && !this.state.descend && "STATIONARY"}</div>
 	</div>
 	</div>
         <div className="App-intro">
@@ -280,7 +253,7 @@ class App extends Component {
                   <LineChart 
                     axes
                     xDomainRange={[0,20]}
-                    yDomainRange={[450,600]}
+                    yDomainRange={[0,60]}
                     data={[this.state.altitudeData[0].points.slice(this.state.accelDatapoint-1,20),this.state.altitudeData[0].points.slice(0,this.state.accelDatapoint-1)]}
                     width={500}
                     height={200}
