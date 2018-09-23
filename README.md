@@ -1,6 +1,6 @@
 # **Avionics Ground Station**
 
-This repository is particularly reserved for the Avionics Ground Station team, if you wish to see the code for the Avionics in rocket telemetry systems please visit the [AvionicsRocket](https://github.com/AstroJays-Hopkins) repository. 
+This repository is particularly reserved for the Avionics Ground Station team, if you wish to see the code for the Avionics in-rocket telemetry systems please visit the [Avionics](https://github.com/AstroJays-Hopkins) repository. 
 
 ## **Overview**
 
