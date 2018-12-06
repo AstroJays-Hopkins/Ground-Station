@@ -24,3 +24,6 @@ cd Ground-Station
 npm start
 ```
 4. Travel to `localhost:3000` for the UI. 
+
+## Preview:
+<img src=https://github.com/AstroJays-Hopkins/Ground-Station/blob/master/preview.png>
